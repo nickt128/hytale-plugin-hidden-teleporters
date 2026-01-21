@@ -1,4 +1,4 @@
-package org.zone404.plugin.pages;
+package org.zone404.plugins.pages;
 
 import com.hypixel.hytale.builtin.adventure.teleporter.component.Teleporter;
 import com.hypixel.hytale.codec.Codec;

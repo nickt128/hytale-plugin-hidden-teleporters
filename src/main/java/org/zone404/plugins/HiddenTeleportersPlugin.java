@@ -1,17 +1,17 @@
-package org.zone404.plugin;
+package org.zone404.plugins;
 
 import com.hypixel.hytale.server.core.event.events.player.PlayerReadyEvent;
 import com.hypixel.hytale.server.core.modules.interaction.interaction.config.server.OpenCustomUIInteraction;
 import com.hypixel.hytale.server.core.plugin.JavaPlugin;
 import com.hypixel.hytale.server.core.plugin.JavaPluginInit;
-import org.zone404.plugin.events.MapEvents;
-import org.zone404.plugin.pages.TeleporterSettingsPageSupplier;
+import org.zone404.plugins.events.MapEvents;
+import org.zone404.plugins.pages.TeleporterSettingsPageSupplier;
 
 import javax.annotation.Nonnull;
 
 @SuppressWarnings("unused")
-public class HiddenTeleporters extends JavaPlugin {
-    public HiddenTeleporters(@Nonnull JavaPluginInit init) {
+public class HiddenTeleportersPlugin extends JavaPlugin {
+    public HiddenTeleportersPlugin(@Nonnull JavaPluginInit init) {
         super(init);
     }
 

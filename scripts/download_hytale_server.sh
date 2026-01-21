@@ -1,5 +1,6 @@
 #!/bin/sh
 if [ -e "hytale-server/Server/HytaleServer.jar" ]; then
+    mkdir -p libs
     cp hytale-server/Server/HytaleServer.jar libs/HytaleServer.jar
     echo "hytale server already downloaded. skipping..."
     exit 0
@@ -13,7 +14,7 @@ fi
 ./hytale-downloader -download-path hytale-server.zip
 mkdir -p hytale-server
 unzip -o -d hytale-server hytale-server.zip
+mkdir -p libs
 cp hytale-server/Server/HytaleServer.jar ./libs/HytaleServer.jar
 #rm hytale-server.zip
-#rm -r hytale-server
 cd -

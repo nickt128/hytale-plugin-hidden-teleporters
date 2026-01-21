@@ -1,7 +1,6 @@
-package org.zone404.plugin.events;
+package org.zone404.plugins.events;
 
 import com.hypixel.hytale.component.Ref;
-import com.hypixel.hytale.logger.HytaleLogger;
 import com.hypixel.hytale.server.core.entity.entities.Player;
 import com.hypixel.hytale.server.core.event.events.player.PlayerReadyEvent;
 import com.hypixel.hytale.server.core.universe.Universe;
@@ -17,7 +16,6 @@ import java.util.concurrent.ConcurrentHashMap;
 /** Hides player icons on the world map. */
 public class MapEvents {
     private static final Set<World> processedWorlds = ConcurrentHashMap.newKeySet();
-    private static final HytaleLogger logger = HytaleLogger.getLogger().getSubLogger("HiddenTeleportsPlugin");
 
     /** Called when a player joins. Removes marker providers and sets player filters. */
     public static void onPlayerReady(@Nonnull final PlayerReadyEvent event) {
