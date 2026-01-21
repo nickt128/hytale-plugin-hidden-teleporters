@@ -230,7 +230,7 @@ $C.@PageOverlay {
 
         $C.@TextField #WarpInput {
           @Anchor = (Left: 5, Bottom: 16);
-          PlaceholderText: %server.customUI.teleporter.targetWarp;
+          PlaceholderText: %server.customUI.teleporter.noWarp;
         }
 
         Group {
