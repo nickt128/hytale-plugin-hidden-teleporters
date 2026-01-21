@@ -1,7 +1,7 @@
 {
   "Group": "org.zone404",
-  "Name": "HiddenTeleportersPlugin",
+  "Name": "HiddenTeleporters",
   "Version": "1.0.0",
-  "Main": "org.zone404.plugin.HiddenTeleportersPlugin",
+  "Main": "org.zone404.plugin.HiddenTeleporters",
   "IncludesAssetPack": true
 }

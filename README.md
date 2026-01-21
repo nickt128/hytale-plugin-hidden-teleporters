@@ -1,5 +1,5 @@
 # Hidden Teleporters
-A simple Hytale server plugin that hides teleporter icons on the map and changes the
+A simple Hytale server mod that hides teleporter icons on the map and changes the
 teleporter interaction user interface to have a text input instead of a dropdown box to prevent players from
 seeing other target warps.
 

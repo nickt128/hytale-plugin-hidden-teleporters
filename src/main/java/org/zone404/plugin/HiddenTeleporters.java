@@ -10,8 +10,8 @@ import org.zone404.plugin.pages.TeleporterSettingsPageSupplier;
 import javax.annotation.Nonnull;
 
 @SuppressWarnings("unused")
-public class HiddenTeleportersPlugin extends JavaPlugin {
-    public HiddenTeleportersPlugin(@Nonnull JavaPluginInit init) {
+public class HiddenTeleporters extends JavaPlugin {
+    public HiddenTeleporters(@Nonnull JavaPluginInit init) {
         super(init);
     }
 

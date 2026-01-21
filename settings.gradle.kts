@@ -1,1 +1,1 @@
-rootProject.name = "HiddenTeleportersPlugin"
+rootProject.name = "HiddenTeleporters"
