@@ -1,0 +1,6 @@
+{
+  "Group": "org.zone404",
+  "Name": "HiddenTeleportersPlugin",
+  "Version": "1.0.0",
+  "Main": "org.zone404.plugin.HiddenTeleportersPlugin"
+}

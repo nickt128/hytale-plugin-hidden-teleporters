@@ -40,8 +40,9 @@ bin/
 .DS_Store
 
 # other stuff
+/build
 hytale-downloader
 /.hytale-downloader-credentials.json
-/libs/hytale-server.zip
-/libs/hytale-server
+/hytale-server.zip
+/hytale-server
 /libs/HytaleServer.jar
