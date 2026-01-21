@@ -6,5 +6,7 @@ start-hytale-server:
 
 update-mod:
     #!/usr/bin/env sh
+    rm build/libs/HiddenTeleportersPlugin-*.jar
     gradle build
-    cp build/libs/HiddenTeleportersPlugin-1.0-SNAPSHOT.jar hytale-server/mods/
+    rm hytale-server/mods/HiddenTeleportersPlugin-*.jar
+    cp build/libs/HiddenTeleportersPlugin-*.jar hytale-server/mods/
