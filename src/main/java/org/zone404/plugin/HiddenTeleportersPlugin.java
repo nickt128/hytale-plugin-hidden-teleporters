@@ -18,7 +18,6 @@ public class HiddenTeleportersPlugin extends JavaPlugin {
     @Override
     protected void setup() {
         getEventRegistry().registerGlobal(PlayerReadyEvent.class, MapEvents::onPlayerReady);
-        this.getCommandRegistry().registerCommand(new TeleportersCommand("teleporters", "An example command", false));
         this.getCodecRegistry(OpenCustomUIInteraction.PAGE_CODEC).register("Teleporter", TeleporterSettingsPageSupplier.class, TeleporterSettingsPageSupplier.CODEC);
         MapEvents.applyToExisting();
     }
