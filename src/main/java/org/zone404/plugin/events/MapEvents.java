@@ -13,7 +13,6 @@ import javax.annotation.Nonnull;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.logging.Level;
 
 /** Hides player icons on the world map. */
 public class MapEvents {
@@ -23,6 +22,7 @@ public class MapEvents {
     /** Called when a player joins. Removes marker providers and sets player filters. */
     public static void onPlayerReady(@Nonnull final PlayerReadyEvent event) {
         final Player player = event.getPlayer();
+        //noinspection ConstantValue
         if (player == null) {
             return;
         }
@@ -39,11 +39,13 @@ public class MapEvents {
     private static World getWorldFromEvent(@Nonnull final PlayerReadyEvent event) {
         try {
             final Ref<EntityStore> playerRef = event.getPlayerRef();
+            //noinspection ConstantValue
             if (playerRef == null) {
                 return null;
             }
 
             final EntityStore entityStore = playerRef.getStore().getExternalData();
+            //noinspection ConstantValue
             if (entityStore == null) {
                 return null;
             }
@@ -62,6 +64,7 @@ public class MapEvents {
         }
 
         final WorldMapManager mapManager = world.getWorldMapManager();
+        //noinspection ConstantValue
         if (mapManager == null) {
             return;
         }
