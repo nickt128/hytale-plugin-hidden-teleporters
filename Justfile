@@ -10,7 +10,7 @@ start-hytale-server:
 update-mod:
     #!/usr/bin/env sh
     rm target/HiddenTeleporters-*.jar
-    mvn package
+    JAVA_HOME=/usr/lib/jvm/java-25-openjdk mvn package
     mkdir -p hytale-server/mods
     rm hytale-server/mods/HiddenTeleporters-*.jar
     cp target/HiddenTeleporters-*.jar hytale-server/mods/
