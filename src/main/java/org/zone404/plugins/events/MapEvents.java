@@ -13,11 +13,11 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
-/** Hides player icons on the world map. */
+/** Hides teleporter icons on the world map. */
 public class MapEvents {
     private static final Set<World> processedWorlds = ConcurrentHashMap.newKeySet();
 
-    /** Called when a player joins. Removes marker providers and sets player filters. */
+    /** Called when a player joins. Removes marker providers. */
     public static void onPlayerReady(@Nonnull final PlayerReadyEvent event) {
         final Player player = event.getPlayer();
         //noinspection ConstantValue
@@ -55,7 +55,7 @@ public class MapEvents {
         }
     }
 
-    /** Removes all player-related marker providers. Processes each world once. */
+    /** Removes warp marker provider. Processes each world once. */
     private static void removeMarkerProviders(@Nonnull final World world) {
         if (!processedWorlds.add(world)) {
             return;
@@ -81,7 +81,7 @@ public class MapEvents {
         processedWorlds.clear();
     }
 
-    /** Applies filters to all existing worlds and players. Call on plugin setup for hot-swap support. */
+    /** Applies filters to all existing worlds. Call on plugin setup for hot-swap support. */
     public static void applyToExisting() {
         for (final World world : Universe.get().getWorlds().values()) {
             removeMarkerProviders(world);
