@@ -3,7 +3,7 @@ A simple Hytale server mod that hides teleporter icons on the map and changes th
 teleporter interaction user interface to have a text input instead of a dropdown box to prevent players from
 seeing other target warps.
 
-This is useful for PvP servers where players want to hide their portals or use secret codes for their portals.
+This is useful for public servers where players want to hide their portals or use secret codes for their portals.
 
 ![Before and After](photos/before-after.png)
 
