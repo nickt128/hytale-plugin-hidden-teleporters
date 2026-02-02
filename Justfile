@@ -5,7 +5,7 @@ mvn-install-hytale-server:
     mvn install:install-file -Dfile=libs/HytaleServer.jar -DgroupId=com.hypixel.hytale -DartifactId=HytaleServer-parent -Dversion=1.0-SNAPSHOT -Dpackaging=jar
 
 start-hytale-server:
-    cd hytale-server && java -jar Server/HytaleServer.jar -assets Assets.zip; cd -
+    cd hytale-server && java -jar Server/HytaleServer.jar -assets Assets.zip --accept-early-plugins; cd -
 
 update-mod:
     #!/usr/bin/env sh

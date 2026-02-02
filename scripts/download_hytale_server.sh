@@ -17,4 +17,3 @@ unzip -o -d hytale-server hytale-server.zip
 mkdir -p libs
 cp hytale-server/Server/HytaleServer.jar ./libs/HytaleServer.jar
 #rm hytale-server.zip
-cd -

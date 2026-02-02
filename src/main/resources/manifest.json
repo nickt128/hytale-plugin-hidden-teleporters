@@ -1,7 +1,7 @@
 {
   "Group": "zone404",
   "Name": "HiddenTeleporters",
-  "Version": "0.1.1",
+  "Version": "0.1.2",
   "Description": "Hides teleporters on map and changes target warp to a text input to prevent teleporter discovery.",
   "Authors": [
     {
