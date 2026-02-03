@@ -47,7 +47,7 @@ import java.util.logging.Level;
 @SuppressWarnings("unused")
 public class CustomTeleportPlugin extends TeleportPlugin {
     @Nonnull
-    private static final HytaleLogger LOGGER = HiddenTeleportersPlugin.get().getLogger();
+    private static final HytaleLogger LOGGER = HytaleLogger.get("HiddenTeleporters|CustomTeleportPlugin");
     @Nonnull
     private final ReentrantLock saveLock = new ReentrantLock();
     @Nonnull
@@ -77,7 +77,7 @@ public class CustomTeleportPlugin extends TeleportPlugin {
     @Nonnull
     @Override
     public HytaleLogger getLogger() {
-        return HiddenTeleportersPlugin.get().getLogger();
+        return HiddenTeleportersPlugin.LOGGER;
     }
 
     @Override

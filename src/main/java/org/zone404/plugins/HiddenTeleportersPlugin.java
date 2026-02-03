@@ -1,5 +1,6 @@
 package org.zone404.plugins;
 
+import com.hypixel.hytale.logger.HytaleLogger;
 import com.hypixel.hytale.server.core.modules.interaction.interaction.config.server.OpenCustomUIInteraction;
 import com.hypixel.hytale.server.core.plugin.JavaPlugin;
 import com.hypixel.hytale.server.core.plugin.JavaPluginInit;
@@ -9,6 +10,7 @@ import javax.annotation.Nonnull;
 
 @SuppressWarnings("unused")
 public class HiddenTeleportersPlugin extends JavaPlugin {
+    public static HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();
     private static HiddenTeleportersPlugin instance;
 
     public HiddenTeleportersPlugin(@Nonnull JavaPluginInit init) {
