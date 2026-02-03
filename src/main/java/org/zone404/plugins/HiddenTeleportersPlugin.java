@@ -10,11 +10,16 @@ import javax.annotation.Nonnull;
 
 @SuppressWarnings("unused")
 public class HiddenTeleportersPlugin extends JavaPlugin {
-    public static HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();
     private static HiddenTeleportersPlugin instance;
 
     public HiddenTeleportersPlugin(@Nonnull JavaPluginInit init) {
         super(init);
+    }
+
+    @Nonnull
+    @Override
+    public HytaleLogger getLogger() {
+        return super.getLogger();
     }
 
     @Override

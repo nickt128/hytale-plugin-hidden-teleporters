@@ -77,7 +77,7 @@ public class CustomTeleportPlugin extends TeleportPlugin {
     @Nonnull
     @Override
     public HytaleLogger getLogger() {
-        return HiddenTeleportersPlugin.LOGGER;
+        return LOGGER;
     }
 
     @Override
