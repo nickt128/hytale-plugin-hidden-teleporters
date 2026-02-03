@@ -47,4 +47,6 @@ hytale-downloader
 /hytale-server
 /libs/HytaleServer.jar
 /libs/hytale-server
+/libs/HytaleServer
+/libs/HytaleServer.old
 /target
