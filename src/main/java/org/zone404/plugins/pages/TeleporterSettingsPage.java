@@ -1,12 +1,10 @@
 package org.zone404.plugins.pages;
 
 import com.hypixel.hytale.builtin.adventure.teleporter.component.Teleporter;
-import com.hypixel.hytale.builtin.adventure.teleporter.util.CannedWarpNames;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.math.vector.Transform;
 import com.hypixel.hytale.protocol.packets.interface_.CustomUIEventBindingType;
-import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.ui.DropdownEntryInfo;
 import com.hypixel.hytale.server.core.ui.LocalizableString;
 import com.hypixel.hytale.server.core.ui.builder.EventData;
@@ -18,6 +16,7 @@ import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import org.zone404.plugins.RandomWarpNameWhenTeleporterPlacedSystem;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -35,7 +34,6 @@ public class TeleporterSettingsPage extends com.hypixel.hytale.builtin.adventure
     }
 
     public void build(@Nonnull Ref<EntityStore> ref, @Nonnull UICommandBuilder commandBuilder, @Nonnull UIEventBuilder eventBuilder, @Nonnull Store<EntityStore> store) {
-        String language = this.playerRef.getLanguage();
         Teleporter teleporter = this.blockRef.getStore().getComponent(this.blockRef, Teleporter.getComponentType());
         commandBuilder.append("Teleporter.ui");
         if (teleporter == null) {
@@ -86,12 +84,11 @@ public class TeleporterSettingsPage extends com.hypixel.hytale.builtin.adventure
                     break;
                 case 1:
                     commandBuilder.set("#WarpInput.Value", teleporter.getWarp() != null ? teleporter.getWarp() : "");
-                    Message placeholder;
+                    String placeholder;
                     if (teleporter.hasOwnedWarp() && !teleporter.isCustomName()) {
-                        placeholder = Message.translation(teleporter.getOwnedWarp());
+                        placeholder = teleporter.getOwnedWarp();
                     } else {
-                        String cannedName = CannedWarpNames.generateCannedWarpNameKey(this.blockRef, language);
-                        placeholder = cannedName == null ? Message.translation("server.customUI.teleporter.warpName") : Message.translation(cannedName);
+                        placeholder = "";
                     }
 
                     commandBuilder.set("#NewWarp.PlaceholderText", placeholder);
@@ -99,6 +96,24 @@ public class TeleporterSettingsPage extends com.hypixel.hytale.builtin.adventure
                     commandBuilder.set("#NewWarp.Value", value);
                     eventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#SaveButton", (new EventData()).append("@Warp", "#WarpInput.Value").append("@NewWarp", "#NewWarp.Value"));
             }
+        }
+    }
+
+    @Override
+    public void handleDataEvent(@Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store, @Nonnull PageEventData data) {
+        var isCustomName = true;
+        Teleporter teleporter = this.blockRef.getStore().getComponent(this.blockRef, Teleporter.getComponentType());
+        if (data.ownedWarp == null || data.ownedWarp.isEmpty()) {
+            if (teleporter != null && !teleporter.isCustomName()) {
+                data.ownedWarp = teleporter.getOwnedWarp();
+            } else {
+                data.ownedWarp = RandomWarpNameWhenTeleporterPlacedSystem.generatePortalName(10);
+            }
+            isCustomName = false;
+        }
+        super.handleDataEvent(ref, store, data);
+        if (teleporter != null) {
+            teleporter.setIsCustomName(isCustomName);
         }
     }
 }

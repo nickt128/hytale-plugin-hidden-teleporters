@@ -26,6 +26,7 @@ public class HiddenTeleportersPlugin extends JavaPlugin {
     protected void setup() {
         instance = this;
         this.getCodecRegistry(OpenCustomUIInteraction.PAGE_CODEC).register("Teleporter", TeleporterSettingsPageSupplier.class, TeleporterSettingsPageSupplier.CODEC);
+        this.getChunkStoreRegistry().registerSystem(new RandomWarpNameWhenTeleporterPlacedSystem());
     }
 
     @Override
