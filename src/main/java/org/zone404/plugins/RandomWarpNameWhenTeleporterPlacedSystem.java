@@ -37,12 +37,9 @@ public class RandomWarpNameWhenTeleporterPlacedSystem extends RefChangeSystem<Ch
             return;
         }
         var warpId = teleporterComponent.getOwnedWarp().toLowerCase();
-        LOGGER.at(Level.INFO).log("Got warp id: " + warpId);
         TeleportPlugin teleportPlugin = TeleportPlugin.get();
         var warp = teleportPlugin.getWarps().get(warpId.toLowerCase());
-        LOGGER.at(Level.INFO).log("Got warp: " + warp);
         var newWarpId = generatePortalName(10);
-        LOGGER.at(Level.INFO).log("Renaming to: " + newWarpId);
 
 
         BlockModule.BlockStateInfo blockStateInfoComponent = commandBuffer.getComponent(ref, BlockModule.BlockStateInfo.getComponentType());
@@ -60,7 +57,6 @@ public class RandomWarpNameWhenTeleporterPlacedSystem extends RefChangeSystem<Ch
                 teleportPlugin.getWarps().put(newWarpId, newWarp);
                 teleportPlugin.saveWarps();
                 teleporterComponent.setOwnedWarp(newWarpId);
-                LOGGER.at(Level.INFO).log("Successfully renamed warp to: " + newWarpId);
             }
         }
     }
