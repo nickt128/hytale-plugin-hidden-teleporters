@@ -19,7 +19,6 @@ import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import org.zone404.plugins.RandomWarpNameWhenTeleporterPlacedSystem;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.UUID;
 
 public class TeleporterSettingsPage extends com.hypixel.hytale.builtin.adventure.teleporter.page.TeleporterSettingsPage {
@@ -27,8 +26,8 @@ public class TeleporterSettingsPage extends com.hypixel.hytale.builtin.adventure
     private final Ref<ChunkStore> blockRef;
     private final Mode mode;
 
-    public TeleporterSettingsPage(@Nonnull PlayerRef playerRef, @Nonnull Ref<ChunkStore> blockRef, Mode mode, @Nullable String activeState) {
-        super(playerRef, blockRef, mode, activeState);
+    public TeleporterSettingsPage(@Nonnull PlayerRef playerRef, @Nonnull Ref<ChunkStore> blockRef, Mode mode) {
+        super(playerRef, blockRef, mode);
         this.blockRef = blockRef;
         this.mode = mode;
     }
@@ -103,11 +102,11 @@ public class TeleporterSettingsPage extends com.hypixel.hytale.builtin.adventure
     public void handleDataEvent(@Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store, @Nonnull PageEventData data) {
         var isCustomName = true;
         Teleporter teleporter = this.blockRef.getStore().getComponent(this.blockRef, Teleporter.getComponentType());
-        if (data.ownedWarp == null || data.ownedWarp.isEmpty()) {
+        if (data.warpName == null || data.warpName.isEmpty()) {
             if (teleporter != null && !teleporter.isCustomName()) {
-                data.ownedWarp = teleporter.getOwnedWarp();
+                data.warpName = teleporter.getOwnedWarp();
             } else {
-                data.ownedWarp = RandomWarpNameWhenTeleporterPlacedSystem.generatePortalName(10);
+                data.warpName = RandomWarpNameWhenTeleporterPlacedSystem.generatePortalName(10);
             }
             isCustomName = false;
         }

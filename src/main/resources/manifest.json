@@ -9,13 +9,14 @@
     }
   ],
   "Website": "https://zone404.org",
-  "ServerVersion": "*",
+  "ServerVersion": "2026.02.17-255364b8e",
   "Main": "org.zone404.plugins.HiddenTeleportersPlugin",
   "IncludesAssetPack": true,
   "SubPlugins": [
     {
       "Name": "CustomTeleportPlugin",
-      "Main": "org.zone404.plugins.CustomTeleportPlugin"
+      "Main": "org.zone404.plugins.CustomTeleportPlugin",
+      "ServerVersion": "2026.02.17-255364b8e"
     }
   ]
 }

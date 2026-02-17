@@ -50,7 +50,7 @@ public class TeleporterSettingsPageSupplier implements CustomPageSupplier {
     }
 
     @Nullable
-    public CustomUIPage tryCreate(@Nonnull Ref<EntityStore> ref, ComponentAccessor<EntityStore> componentAccessor, @Nonnull PlayerRef playerRef, @Nonnull InteractionContext context) {
+    public CustomUIPage tryCreate(@Nonnull Ref<EntityStore> ref, @Nonnull ComponentAccessor<EntityStore> componentAccessor, @Nonnull PlayerRef playerRef, @Nonnull InteractionContext context) {
         BlockPosition targetBlock = context.getTargetBlock();
         if (targetBlock == null) {
             return null;
@@ -77,7 +77,7 @@ public class TeleporterSettingsPageSupplier implements CustomPageSupplier {
                 }
 
                 assert blockRef != null;
-                return new TeleporterSettingsPage(playerRef, blockRef, this.mode, this.activeState);
+                return new TeleporterSettingsPage(playerRef, blockRef, this.mode);
             }
         }
     }

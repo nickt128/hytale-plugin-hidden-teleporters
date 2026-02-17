@@ -56,7 +56,7 @@ public class CustomTeleportPlugin extends TeleportPlugin {
     public CustomTeleportPlugin(@Nonnull JavaPluginInit init) {
         super(init);
         var tpPlugin = PluginManager.get().getPlugin(PluginIdentifier.fromString("Hytale:Teleport"));
-        disableTeleportPlugin((TeleportPlugin) tpPlugin);
+//        disableTeleportPlugin((TeleportPlugin) tpPlugin);
         if (tpPlugin != null && tpPlugin.isDisabled()) {
             this.getLogger().at(Level.INFO).log("Hytale:Teleport disabled successfully.");
         } else {
