@@ -102,6 +102,9 @@ public class TeleporterSettingsPage extends com.hypixel.hytale.builtin.adventure
     public void handleDataEvent(@Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store, @Nonnull PageEventData data) {
         var isCustomName = true;
         Teleporter teleporter = this.blockRef.getStore().getComponent(this.blockRef, Teleporter.getComponentType());
+        if (data.destinationWarp != null) {
+            data.destinationWarp = data.destinationWarp.toLowerCase();
+        }
         if (data.warpName == null || data.warpName.isEmpty()) {
             if (teleporter != null && !teleporter.isCustomName()) {
                 data.warpName = teleporter.getOwnedWarp();
