@@ -45,9 +45,7 @@ public class TeleporterSettingsPage extends com.hypixel.hytale.builtin.adventure
     }
 
     public void build(@Nonnull Ref<EntityStore> ref, @Nonnull UICommandBuilder commandBuilder, @Nonnull UIEventBuilder eventBuilder, @Nonnull Store<EntityStore> store) {
-        Player playerComponent = store.getComponent(ref, Player.getComponentType());
         Teleporter teleporter = this.blockRef.getStore().getComponent(this.blockRef, Teleporter.getComponentType());
-        LOGGER.atInfo().log(playerComponent != null ? (playerComponent.getDisplayName() + " is opening") : "Opening" + " teleporter with name: " + (teleporter != null ? teleporter.getOwnedWarp() : ""));
         commandBuilder.append("Teleporter.ui");
         if (teleporter == null) {
             commandBuilder.set("#ErrorScreen.Visible", true);
@@ -174,9 +172,14 @@ public class TeleporterSettingsPage extends com.hypixel.hytale.builtin.adventure
                         String ownedWarpBefore = teleporterComponent.getOwnedWarp();
                         String destinationWarpBefore = teleporterComponent.getWarp();
                         CreateWarpWhenTeleporterPlacedSystem.createWarp(worldChunkComponent, blockStateInfo, data.warpName);
-                        LOGGER.atInfo().log("Setting teleporter warp name to: " + data.warpName);
                         teleporterComponent.setOwnedWarp(data.warpName);
                         teleporterComponent.setIsCustomName(customName);
+                        if (data.destinationWarp != null && !data.destinationWarp.isEmpty()) {
+                            boolean destinationExists = TeleportPlugin.get().getWarps().containsKey(data.destinationWarp.toLowerCase());
+                            if (!destinationExists) {
+                                LOGGER.atInfo().log(playerComponent.getDisplayName() + " entered invalid destination warp name in teleporter.");
+                            }
+                        }
                         switch (this.mode.ordinal()) {
                             case 0:
                                 teleporterComponent.setWorldUuid(data.world != null && !data.world.isEmpty() ? UUID.fromString(data.world) : null);
