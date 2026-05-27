@@ -61,18 +61,18 @@ public class TeleporterSettingsPage extends com.hypixel.hytale.builtin.adventure
                     commandBuilder.set("#BlockRelative #CheckBox.Value", (relativeMask & 64) != 0);
                     Transform transform = teleporter.getTransform();
                     if (transform != null) {
-                        commandBuilder.set("#X #Input.Value", transform.getPosition().getX());
-                        commandBuilder.set("#Y #Input.Value", transform.getPosition().getY());
-                        commandBuilder.set("#Z #Input.Value", transform.getPosition().getZ());
+                        commandBuilder.set("#X #Input.Value", transform.getPosition().x());
+                        commandBuilder.set("#Y #Input.Value", transform.getPosition().y());
+                        commandBuilder.set("#Z #Input.Value", transform.getPosition().z());
                     }
 
                     commandBuilder.set("#X #CheckBox.Value", (relativeMask & 1) != 0);
                     commandBuilder.set("#Y #CheckBox.Value", (relativeMask & 2) != 0);
                     commandBuilder.set("#Z #CheckBox.Value", (relativeMask & 4) != 0);
                     if (transform != null) {
-                        commandBuilder.set("#Yaw #Input.Value", transform.getRotation().getYaw());
-                        commandBuilder.set("#Pitch #Input.Value", transform.getRotation().getPitch());
-                        commandBuilder.set("#Roll #Input.Value", transform.getRotation().getRoll());
+                        commandBuilder.set("#Yaw #Input.Value", transform.getRotation().yaw());
+                        commandBuilder.set("#Pitch #Input.Value", transform.getRotation().pitch());
+                        commandBuilder.set("#Roll #Input.Value", transform.getRotation().roll());
                     }
 
                     commandBuilder.set("#Yaw #CheckBox.Value", (relativeMask & 8) != 0);
@@ -98,6 +98,9 @@ public class TeleporterSettingsPage extends com.hypixel.hytale.builtin.adventure
                     String placeholder = "";
                     if (teleporter.hasOwnedWarp() && !teleporter.isCustomName()) {
                         placeholder = teleporter.getOwnedWarp();
+                        if (placeholder == null) {
+                            placeholder = "";
+                        }
                     }
 
                     commandBuilder.set("#NewWarp.PlaceholderText", placeholder);
@@ -112,6 +115,7 @@ public class TeleporterSettingsPage extends com.hypixel.hytale.builtin.adventure
     @Override
     public void handleDataEvent(@Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store, @Nonnull PageEventData data) {
         Player playerComponent = store.getComponent(ref, Player.getComponentType());
+        PlayerRef playerRef = store.getComponent(ref, PlayerRef.getComponentType());
         if (playerComponent != null) {
             BlockModule.BlockStateInfo blockStateInfo = this.blockRef.getStore().getComponent(this.blockRef, BlockModule.BlockStateInfo.getComponentType());
             if (blockStateInfo == null) {
@@ -177,16 +181,20 @@ public class TeleporterSettingsPage extends com.hypixel.hytale.builtin.adventure
                         if (data.destinationWarp != null && !data.destinationWarp.isEmpty()) {
                             boolean destinationExists = TeleportPlugin.get().getWarps().containsKey(data.destinationWarp.toLowerCase());
                             if (!destinationExists) {
-                                LOGGER.atInfo().log(playerComponent.getDisplayName() + " entered invalid destination warp name in teleporter.");
+                                var username = "player";
+                                if (playerRef != null) {
+                                    username = playerRef.getUsername();
+                                }
+                                LOGGER.atInfo().log(username + " entered invalid destination warp name in teleporter.");
                             }
                         }
                         switch (this.mode.ordinal()) {
                             case 0:
                                 teleporterComponent.setWorldUuid(data.world != null && !data.world.isEmpty() ? UUID.fromString(data.world) : null);
                                 Transform transform = new Transform();
-                                transform.getPosition().setX(data.x);
-                                transform.getPosition().setY(data.y);
-                                transform.getPosition().setZ(data.z);
+                                transform.getPosition().x = data.x;
+                                transform.getPosition().y = data.y;
+                                transform.getPosition().z = data.z;
                                 transform.getRotation().setYaw(data.yaw);
                                 transform.getRotation().setPitch(data.pitch);
                                 transform.getRotation().setRoll(data.roll);
