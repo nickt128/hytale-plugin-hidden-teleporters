@@ -22,7 +22,7 @@ import com.hypixel.hytale.server.core.plugin.PluginState;
 import com.hypixel.hytale.server.core.universe.Universe;
 import com.hypixel.hytale.server.core.universe.world.events.AddWorldEvent;
 import com.hypixel.hytale.server.core.universe.world.events.AllWorldsLoadedEvent;
-import com.hypixel.hytale.server.core.universe.world.events.ChunkPreLoadProcessEvent;
+import com.hypixel.hytale.server.core.universe.world.events.ChunkSectionPreLoadProcessEvent;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.core.util.BsonUtil;
 import org.bson.BsonArray;
@@ -89,7 +89,7 @@ public class CustomTeleportPlugin extends TeleportPlugin {
         commandRegistry.registerCommand(new WarpCommand());
         commandRegistry.registerCommand(new SpawnCommand());
         eventRegistry.register(LoadedAssetsEvent.class, ModelAsset.class, this::onModelAssetChange);
-        eventRegistry.registerGlobal(ChunkPreLoadProcessEvent.class, this::onChunkPreLoadProcess);
+        eventRegistry.registerGlobal(ChunkSectionPreLoadProcessEvent.class, this::onChunkSectionPreLoadProcess);
         eventRegistry.registerGlobal(AddWorldEvent.class, CustomTeleportPlugin::onAddWorld);
         eventRegistry.registerGlobal(AllWorldsLoadedEvent.class, (_) -> this.loadWarps());
         this.setPrivateField("teleportHistoryComponentType", EntityStore.REGISTRY.registerComponent(TeleportHistory.class, TeleportHistory::new));
@@ -228,12 +228,12 @@ public class CustomTeleportPlugin extends TeleportPlugin {
         }
     }
 
-    private void onChunkPreLoadProcess(@Nonnull ChunkPreLoadProcessEvent event) {
+    private void onChunkSectionPreLoadProcess(@Nonnull ChunkSectionPreLoadProcessEvent event) {
         try {
-            Method method = this.getPrivateMethod("onChunkPreLoadProcess", ChunkPreLoadProcessEvent.class);
+            Method method = this.getPrivateMethod("onChunkSectionPreLoadProcess", ChunkSectionPreLoadProcessEvent.class);
             method.invoke(TeleportPlugin.get(), event);
         } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
-            this.getLogger().at(Level.SEVERE).log("Failed call onChunkPreLoadProcess: " + e);
+            this.getLogger().at(Level.SEVERE).log("Failed call onChunkSectionPreLoadProcess: " + e);
         }
     }
 

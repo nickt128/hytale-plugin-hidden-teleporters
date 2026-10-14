@@ -21,7 +21,6 @@ import com.hypixel.hytale.server.core.ui.builder.UIEventBuilder;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.Universe;
 import com.hypixel.hytale.server.core.universe.world.World;
-import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
@@ -121,14 +120,10 @@ public class TeleporterSettingsPage extends com.hypixel.hytale.builtin.adventure
             if (blockStateInfo == null) {
                 playerComponent.getPageManager().setPage(ref, store, Page.None);
             } else {
-                Ref<ChunkStore> chunkRef = blockStateInfo.getChunkRef();
-                if (!chunkRef.isValid()) {
+                Ref<ChunkStore> sectionRef = blockStateInfo.getSectionRef();
+                if (!sectionRef.isValid()) {
                     playerComponent.getPageManager().setPage(ref, store, Page.None);
                 } else {
-                    WorldChunk worldChunkComponent = chunkRef.getStore().getComponent(chunkRef, WorldChunk.getComponentType());
-
-                    assert worldChunkComponent != null;
-
                     Teleporter teleporterComponent = this.blockRef.getStore().getComponent(this.blockRef, Teleporter.getComponentType());
                     if (teleporterComponent == null) {
                         playerComponent.getPageManager().setPage(ref, store, Page.None);
@@ -175,7 +170,7 @@ public class TeleporterSettingsPage extends com.hypixel.hytale.builtin.adventure
                         playerComponent.getPageManager().setPage(ref, store, Page.None);
                         String ownedWarpBefore = teleporterComponent.getOwnedWarp();
                         String destinationWarpBefore = teleporterComponent.getWarp();
-                        CreateWarpWhenTeleporterPlacedSystem.createWarp(worldChunkComponent, blockStateInfo, data.warpName);
+                        CreateWarpWhenTeleporterPlacedSystem.createWarp(this.blockRef.getStore(), sectionRef, blockStateInfo, data.warpName);
                         teleporterComponent.setOwnedWarp(data.warpName);
                         teleporterComponent.setIsCustomName(customName);
                         if (data.destinationWarp != null && !data.destinationWarp.isEmpty()) {
@@ -213,7 +208,7 @@ public class TeleporterSettingsPage extends com.hypixel.hytale.builtin.adventure
                         if (ownChanged || destinationChanged) {
                             World world = store.getExternalData().getWorld();
                             TurnOffTeleportersSystem.updatePortalBlocksInWorld(world);
-                            worldChunkComponent.markNeedsSaving();
+                            blockStateInfo.markNeedsSaving();
                         }
 
                     }

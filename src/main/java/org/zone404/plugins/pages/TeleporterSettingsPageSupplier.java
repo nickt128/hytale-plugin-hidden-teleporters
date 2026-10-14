@@ -13,7 +13,7 @@ import com.hypixel.hytale.server.core.modules.block.BlockModule;
 import com.hypixel.hytale.server.core.modules.interaction.interaction.config.server.OpenCustomUIInteraction.CustomPageSupplier;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.World;
-import com.hypixel.hytale.server.core.universe.world.chunk.BlockComponentChunk;
+import com.hypixel.hytale.server.core.universe.world.chunk.section.BlockComponentSection;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 
@@ -58,22 +58,23 @@ public class TeleporterSettingsPageSupplier implements CustomPageSupplier {
             Store<EntityStore> store = ref.getStore();
             World world = store.getExternalData().getWorld();
             ChunkStore chunkStore = world.getChunkStore();
-            Ref<ChunkStore> chunkRef = chunkStore.getChunkReference(ChunkUtil.indexChunkFromBlock(targetBlock.x, targetBlock.z));
-            BlockComponentChunk blockComponentChunk = chunkRef == null ? null : chunkStore.getStore().getComponent(chunkRef, BlockComponentChunk.getComponentType());
-            if (blockComponentChunk == null) {
+            Ref<ChunkStore> sectionRef = chunkStore.getChunkSectionReferenceAtBlock(targetBlock.x, targetBlock.y, targetBlock.z);
+            Store<ChunkStore> chunkStoreStore = chunkStore.getStore();
+            BlockComponentSection blockComponentSection = sectionRef == null ? null : chunkStoreStore.getComponent(sectionRef, BlockComponentSection.getComponentType());
+            if (blockComponentSection == null) {
                 return null;
             } else {
-                int blockIndex = ChunkUtil.indexBlockInColumn(targetBlock.x, targetBlock.y, targetBlock.z);
-                Ref<ChunkStore> blockRef = blockComponentChunk.getEntityReference(blockIndex);
+                int blockIndex = ChunkUtil.indexBlock(targetBlock.x, targetBlock.y, targetBlock.z);
+                Ref<ChunkStore> blockRef = blockComponentSection.getBlockReference(blockIndex);
                 if (blockRef == null || !blockRef.isValid()) {
                     if (!this.create) {
                         return null;
                     }
 
                     Holder<ChunkStore> holder = ChunkStore.REGISTRY.newHolder();
-                    holder.putComponent(BlockModule.BlockStateInfo.getComponentType(), new BlockModule.BlockStateInfo(blockIndex, chunkRef));
+                    holder.putComponent(BlockModule.BlockStateInfo.getComponentType(), new BlockModule.BlockStateInfo(blockIndex, sectionRef));
                     holder.ensureComponent(Teleporter.getComponentType());
-                    blockRef = world.getChunkStore().getStore().addEntity(holder, AddReason.SPAWN);
+                    blockRef = chunkStoreStore.addEntity(holder, AddReason.SPAWN);
                 }
 
                 assert blockRef != null;
