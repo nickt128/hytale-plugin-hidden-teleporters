@@ -233,6 +233,11 @@ $C.@PageOverlay {
           PlaceholderText: %server.customUI.teleporter.noWarp;
         }
 
+        $C.@CheckBoxWithLabel #ClearOnUse {
+          @Text = "Clear on use";
+          Anchor: (Left: 5);
+        }
+
         Group {
           Anchor: (Vertical: 16, Height: 1);
           Background: #5e512c;

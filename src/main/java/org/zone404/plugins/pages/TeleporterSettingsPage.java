@@ -27,8 +27,12 @@ import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import org.zone404.plugins.RandomWarpNameWhenTeleporterPlacedSystem;
 
 import javax.annotation.Nonnull;
+import java.util.Collections;
+import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
+import java.util.WeakHashMap;
+import java.util.regex.Pattern;
 
 public class TeleporterSettingsPage extends com.hypixel.hytale.builtin.adventure.teleporter.page.TeleporterSettingsPage {
     @Nonnull
@@ -36,6 +40,36 @@ public class TeleporterSettingsPage extends com.hypixel.hytale.builtin.adventure
     @Nonnull
     private final Ref<ChunkStore> blockRef;
     private final Mode mode;
+    private boolean pendingClearOnUse = false;
+
+    // an in-memory flag keyed by the teleporter block reference.
+    private static final Map<Ref<ChunkStore>, Boolean> CLEAR_ON_USE =
+            Collections.synchronizedMap(new WeakHashMap<>());
+    private static final Pattern CLEAR_ON_USE_PATTERN =
+            Pattern.compile("\"@?ClearOnUse\"\\s*:\\s*true", Pattern.CASE_INSENSITIVE);
+
+    public static boolean isClearOnUse(Ref<ChunkStore> blockRef) {
+        if (blockRef == null) {
+            return false;
+        }
+        synchronized (CLEAR_ON_USE) {
+            return Boolean.TRUE.equals(CLEAR_ON_USE.get(blockRef));
+        }
+    }
+
+    public static void setClearOnUse(Ref<ChunkStore> blockRef, boolean value) {
+        if (blockRef == null) {
+            return;
+        }
+        synchronized (CLEAR_ON_USE) {
+            if (value) {
+                CLEAR_ON_USE.put(blockRef, Boolean.TRUE);
+            } else {
+                CLEAR_ON_USE.remove(blockRef);
+            }
+        }
+    }
+
 
     public TeleporterSettingsPage(@Nonnull PlayerRef playerRef, @Nonnull Ref<ChunkStore> blockRef, Mode mode) {
         super(playerRef, blockRef, mode);
@@ -89,11 +123,13 @@ public class TeleporterSettingsPage extends com.hypixel.hytale.builtin.adventure
                     commandBuilder.set("#WorldDropdown.Value", worldUuid != null ? worldUuid.toString() : "");
 
                     commandBuilder.set("#WarpInput.Value", teleporter.getWarp() != null ? teleporter.getWarp() : "");
+                    commandBuilder.set("#ClearOnUse #CheckBox.Value", isClearOnUse(this.blockRef));
                     commandBuilder.set("#NewWarp.Value", teleporter.getOwnedWarp() != null ? teleporter.getOwnedWarp() : "");
-                    eventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#SaveButton", (new EventData()).append("@BlockRelative", "#BlockRelative #CheckBox.Value").append("@X", "#X #Input.Value").append("@Y", "#Y #Input.Value").append("@Z", "#Z #Input.Value").append("@XIsRelative", "#X #CheckBox.Value").append("@YIsRelative", "#Y #CheckBox.Value").append("@ZIsRelative", "#Z #CheckBox.Value").append("@Yaw", "#Yaw #Input.Value").append("@Pitch", "#Pitch #Input.Value").append("@Roll", "#Roll #Input.Value").append("@YawIsRelative", "#Yaw #CheckBox.Value").append("@PitchIsRelative", "#Pitch #CheckBox.Value").append("@RollIsRelative", "#Roll #CheckBox.Value").append("@World", "#WorldDropdown.Value").append("@Warp", "#WarpInput.Value").append("@NewWarp", "#NewWarp.Value"));
+                    eventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#SaveButton", (new EventData()).append("@BlockRelative", "#BlockRelative #CheckBox.Value").append("@X", "#X #Input.Value").append("@Y", "#Y #Input.Value").append("@Z", "#Z #Input.Value").append("@XIsRelative", "#X #CheckBox.Value").append("@YIsRelative", "#Y #CheckBox.Value").append("@ZIsRelative", "#Z #CheckBox.Value").append("@Yaw", "#Yaw #Input.Value").append("@Pitch", "#Pitch #Input.Value").append("@Roll", "#Roll #Input.Value").append("@YawIsRelative", "#Yaw #CheckBox.Value").append("@PitchIsRelative", "#Pitch #CheckBox.Value").append("@RollIsRelative", "#Roll #CheckBox.Value").append("@World", "#WorldDropdown.Value").append("@Warp", "#WarpInput.Value").append("@NewWarp", "#NewWarp.Value").append("@ClearOnUse", "#ClearOnUse #CheckBox.Value"));
                     break;
                 case 1:
                     commandBuilder.set("#WarpInput.Value", teleporter.getWarp() != null ? teleporter.getWarp() : "");
+                    commandBuilder.set("#ClearOnUse #CheckBox.Value", isClearOnUse(this.blockRef));
                     String placeholder = "";
                     if (teleporter.hasOwnedWarp() && !teleporter.isCustomName()) {
                         placeholder = teleporter.getOwnedWarp();
@@ -105,9 +141,19 @@ public class TeleporterSettingsPage extends com.hypixel.hytale.builtin.adventure
                     commandBuilder.set("#NewWarp.PlaceholderText", placeholder);
                     String value = teleporter.isCustomName() && teleporter.getOwnedWarp() != null ? teleporter.getOwnedWarp() : "";
                     commandBuilder.set("#NewWarp.Value", value);
-                    eventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#SaveButton", (new EventData()).append("@Warp", "#WarpInput.Value").append("@NewWarp", "#NewWarp.Value"));
+                    eventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#SaveButton", (new EventData()).append("@Warp", "#WarpInput.Value").append("@NewWarp", "#NewWarp.Value").append("@ClearOnUse", "#ClearOnUse #CheckBox.Value"));
             }
 
+        }
+    }
+
+    @Override
+    public void handleDataEvent(@Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store, String rawData) {
+        this.pendingClearOnUse = rawData != null && CLEAR_ON_USE_PATTERN.matcher(rawData).find();
+        try {
+            super.handleDataEvent(ref, store, rawData);
+        } finally {
+            this.pendingClearOnUse = false;
         }
     }
 
@@ -202,6 +248,8 @@ public class TeleporterSettingsPage extends com.hypixel.hytale.builtin.adventure
                                 teleporterComponent.setTransform(null);
                                 teleporterComponent.setWarp(data.destinationWarp != null && !data.destinationWarp.isEmpty() ? data.destinationWarp.toLowerCase() : null);
                         }
+
+                        setClearOnUse(this.blockRef, this.pendingClearOnUse);
 
                         boolean ownChanged = !Objects.equals(ownedWarpBefore, teleporterComponent.getOwnedWarp());
                         boolean destinationChanged = !Objects.equals(destinationWarpBefore, teleporterComponent.getWarp());

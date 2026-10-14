@@ -1,6 +1,7 @@
 package org.zone404.plugins;
 
 import com.hypixel.hytale.builtin.adventure.teleporter.TeleporterPlugin;
+import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
 import com.hypixel.hytale.builtin.adventure.teleporter.component.Teleporter;
 import com.hypixel.hytale.component.ComponentType;
 import com.hypixel.hytale.logger.HytaleLogger;
@@ -36,6 +37,7 @@ public class HiddenTeleportersPlugin extends JavaPlugin {
         ComponentType<ChunkStore, Teleporter> teleporterComponentType = TeleporterPlugin.get().getTeleporterComponentType();
         ComponentType<ChunkStore, BlockModule.BlockStateInfo> blockStateInfoComponentType = BlockModule.BlockStateInfo.getComponentType();
         this.getChunkStoreRegistry().registerSystem(new RandomWarpNameWhenTeleporterPlacedSystem(placedByInteractionComponentType, teleporterComponentType, blockStateInfoComponentType));
+        this.getEntityStoreRegistry().registerSystem(new ClearOnUseTeleporterSystem(TeleporterPlugin.get().getUsedTeleporterComponentType(), TransformComponent.getComponentType()));
     }
 
     @Override
